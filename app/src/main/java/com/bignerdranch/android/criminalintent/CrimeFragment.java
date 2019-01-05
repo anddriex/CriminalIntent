@@ -51,8 +51,7 @@ public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
     private Unbinder unbinder;
-    private final Intent pickContact = new Intent(Intent.ACTION_PICK,
-            ContactsContract.Contacts.CONTENT_URI);
+
 
     @BindView(R.id.crime_title) EditText mTitleField;
     @BindView(R.id.crime_solved) CheckBox mSolvedCheckBox;
@@ -60,6 +59,8 @@ public class CrimeFragment extends Fragment {
     @BindView(R.id.crime_report) Button mReportButton;
     @BindView(R.id.crime_suspect) Button mSuspectButton;
 
+    private final Intent pickContact = new Intent(Intent.ACTION_PICK,
+            ContactsContract.Contacts.CONTENT_URI);
 
     @OnClick(R.id.crime_suspect)
     public void chooseSuspect(View v){
@@ -116,7 +117,9 @@ public class CrimeFragment extends Fragment {
                 .updateCrime(mCrime);
     }
 
-    @Nullable@Override public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
         unbinder = ButterKnife.bind(this, v);
@@ -147,7 +150,8 @@ public class CrimeFragment extends Fragment {
         return fragment;
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -238,7 +242,8 @@ public class CrimeFragment extends Fragment {
         return report;
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
