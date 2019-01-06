@@ -40,6 +40,7 @@ import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import butterknife.Unbinder;
 
+import static android.support.v4.app.ShareCompat.*;
 import static android.widget.CompoundButton.*;
 
 public class CrimeFragment extends Fragment {
@@ -80,15 +81,12 @@ public class CrimeFragment extends Fragment {
 
     @OnClick(R.id.crime_report)
     public void sendReport(View v){
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-
-        i.setType("text/plain");
-        i.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
-        i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
-
-        i = Intent.createChooser(i, getString(R.string.send_report));
-
+        IntentBuilder intentB = IntentBuilder.from(getActivity());
+        intentB.setType("text/plain");
+        intentB.setChooserTitle(R.string.send_report);
+        intentB.setSubject(getString(R.string.crime_report_subject));
+        intentB.setText(getCrimeReport());
+        Intent i = intentB.createChooserIntent();
         startActivity(i);
     }
 
