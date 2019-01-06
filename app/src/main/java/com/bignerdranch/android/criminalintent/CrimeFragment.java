@@ -59,16 +59,6 @@ public class CrimeFragment extends Fragment {
     @BindView(R.id.crime_report) Button mReportButton;
     @BindView(R.id.crime_suspect) Button mSuspectButton;
 
-    private final Intent pickContact = new Intent(Intent.ACTION_PICK,
-            ContactsContract.Contacts.CONTENT_URI);
-
-    @OnClick(R.id.crime_suspect)
-    public void chooseSuspect(View v){
-
-        startActivityForResult(pickContact, REQUEST_CONTACT);
-    }
-
-
     @OnClick(R.id.crime_date)
     public void openDatePicker() {
         FragmentManager manager = getFragmentManager();
@@ -126,8 +116,15 @@ public class CrimeFragment extends Fragment {
         mTitleField.setText(mCrime.getTitle());
         updateDate();
         mSolvedCheckBox.setChecked(mCrime.isSolved());
-        //final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 
+        final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+
+        mSuspectButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
         if(mCrime.getSuspect() != null){
             mSuspectButton.setText(mCrime.getSuspect());
         }
