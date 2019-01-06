@@ -17,6 +17,7 @@
     -->
     <string name="crime_suspect_text">Choose Suspect</string>
     <string name="crime_report_text">Send Crime Report</string>
+    <string name="crime_call_text">Call the suspect</string>
 
     <!--
         Using a format String
