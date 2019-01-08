@@ -2,6 +2,7 @@ package com.bignerdranch.android.criminalintent.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
+import android.util.Log;
 
 import com.bignerdranch.android.criminalintent.Crime;
 
@@ -11,6 +12,8 @@ import java.util.UUID;
 import static com.bignerdranch.android.criminalintent.database.CrimeDBSchema.*;
 
 public class CrimeCursorWrapper extends CursorWrapper {
+
+    private static final String NUMBER  = "number";
     /**
      * Creates a cursor wrapper.
      *
@@ -26,7 +29,6 @@ public class CrimeCursorWrapper extends CursorWrapper {
         long date = getLong(getColumnIndex(CrimeTable.Cols.DATE));
         int isSolved = getInt(getColumnIndex(CrimeTable.Cols.SOLVED));
         String suspect = getString(getColumnIndex(CrimeTable.Cols.SUSPECT));
-
         Crime crime = new Crime(UUID.fromString(uuidString));
         crime.setTitle(title);
         crime.setDate(new Date(date));

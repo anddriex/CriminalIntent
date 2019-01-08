@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.bignerdranch.android.criminalintent.database.CrimeBaseHelper;
@@ -20,6 +21,8 @@ public class CrimeLab {
     private static CrimeLab sCrimeLab;
     private Context mContext;
     private SQLiteDatabase mDataBase;
+    private static final String NUMBER = "number";
+    private static final String COUNT = "count";
 
 
     public static CrimeLab get(Context context) {
@@ -48,8 +51,6 @@ public class CrimeLab {
                 CrimeTable.Cols.UUID + "= ?",
                 new String[]{crime.getId().toString()}
                 );
-
-        System.out.println("CrimeLab.deleteCrime " + crime.getTitle() + " deleted");
     }
 
     public List<Crime> getCrimes(){
@@ -95,10 +96,10 @@ public class CrimeLab {
         mDataBase.update(CrimeTable.NAME, values,
                 CrimeTable.Cols.UUID + "= ?",
                 new String[] {uuidString});
-        System.out.println("CrimeLab.updateCrime "+crime.getTitle() +" updated");
     }
 
     private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs){
+
         Cursor cursor = mDataBase.query(
                 CrimeTable.NAME,
                 null, //columns - null selects all columns
@@ -119,7 +120,6 @@ public class CrimeLab {
         values.put(CrimeTable.Cols.DATE, crime.getDate().getTime());
         values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
         values.put(CrimeTable.Cols.SUSPECT, crime.getSuspect());
-
         return values;
     }
 }

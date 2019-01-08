@@ -47,7 +47,6 @@ public class Crime {
         mSolved = solved;
     }
 
-
     public String getSuspect() {
         return mSuspect;
     }
