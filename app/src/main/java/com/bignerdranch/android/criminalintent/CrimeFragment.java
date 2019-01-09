@@ -25,6 +25,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import org.w3c.dom.Text;
 
@@ -58,6 +60,12 @@ public class CrimeFragment extends Fragment {
     @BindView(R.id.crime_date) Button mDateButton;
     @BindView(R.id.crime_report) Button mReportButton;
     @BindView(R.id.crime_suspect) Button mSuspectButton;
+    @BindView(R.id.crime_photo)
+    ImageView mPhotoView;
+    @BindView(R.id.crime_camera)
+    ImageButton mPhotoButton;
+
+
 
     @OnClick(R.id.crime_date)
     public void openDatePicker() {
