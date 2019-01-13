@@ -319,7 +319,7 @@ public class CrimeFragment extends Fragment {
 //            }
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhtoFile.getPath(), getActivity());
             Matrix matrix = new Matrix();
-            matrix.postRotate(270);
+            matrix.postRotate(90);
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, true);
             mPhotoView.setImageBitmap(rotatedBitmap);
