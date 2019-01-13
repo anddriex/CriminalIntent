@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -25,6 +26,7 @@ public class PhotoZoomFragment extends DialogFragment {
     ImageView mPhotoView;
 
     private Unbinder unbinder;
+    private File mPhotoFile;
 
     public static PhotoZoomFragment newInstance(File photo) {
         Bundle args = new Bundle();
@@ -40,26 +42,30 @@ public class PhotoZoomFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_photo, null);
         unbinder = ButterKnife.bind(this, view);
-        File photoFile = (File) getArguments().getSerializable(ARG_PHOTO);
-        if (photoFile == null || !photoFile.exists()) {
-            mPhotoView.setImageDrawable(null);
-        } else {
-
-//            try {
-//
-//                //ExifInterface exif = new ExifInterface(mPhtoFile.getName());
-//                //int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-//
-//            } catch (IOException e){
+//        ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+        mPhotoFile = (File) getArguments().getSerializable(ARG_PHOTO);
+//        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
 //
 //            }
-            Bitmap bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), getActivity());
+//        });
+
+
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            System.out.printf("LLEGAAAAAAAAAAAAA! a IMAGEN NULL!!!!!!1");
+            mPhotoView.setImageDrawable(null);
+        } else {
+            System.out.printf("LLEGAAAAAAAAAAAAA!");
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(),
+                    getActivity());
             Matrix matrix = new Matrix();
             matrix.postRotate(90);
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, true);
             mPhotoView.setImageBitmap(rotatedBitmap);
         }
+
         return new AlertDialog.Builder(getContext()).setView(view).create();
     }
 

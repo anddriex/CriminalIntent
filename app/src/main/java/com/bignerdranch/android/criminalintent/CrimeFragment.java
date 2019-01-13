@@ -20,12 +20,14 @@ import android.support.v4.app.ShareCompat;
 import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -65,6 +67,7 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private File mPhtoFile;
     private Unbinder unbinder;
+    private ViewTreeObserver mObserver;
 
 
     @BindView(R.id.crime_title) EditText mTitleField;
@@ -124,6 +127,7 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mPhtoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
+
     }
 
     @Override
@@ -188,8 +192,14 @@ public class CrimeFragment extends Fragment {
             }
         });
 
-        updatePhotoView();
+        mObserver = mPhotoView.getViewTreeObserver();
 
+        mObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                updatePhotoView();
+            }
+        });
 
         return  v;
     }
@@ -253,6 +263,7 @@ public class CrimeFragment extends Fragment {
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             updatePhotoView();
+
         }
     }
 
@@ -308,21 +319,12 @@ public class CrimeFragment extends Fragment {
         if(mPhtoFile == null || !mPhtoFile.exists()) {
             mPhotoView.setImageDrawable(null);
         }else{
-
-//            try {
-//
-//                //ExifInterface exif = new ExifInterface(mPhtoFile.getName());
-//                //int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-//
-//            } catch (IOException e){
-//
-//            }
-            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhtoFile.getPath(), getActivity());
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                    bitmap.getHeight(), matrix, true);
-            mPhotoView.setImageBitmap(rotatedBitmap);
+                Bitmap bitmap = PictureUtils.getScaledBitmap(mPhtoFile.getPath(), mPhotoView.getWidth(), mPhotoView.getHeight());
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                        bitmap.getHeight(), matrix, true);
+                mPhotoView.setImageBitmap(rotatedBitmap);
         }
     }
 
