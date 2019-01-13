@@ -44,7 +44,9 @@ public class DatePickerFragment extends DialogFragment {
         return fragment;
     }
 
-    @NonNull @Override public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         View view = LayoutInflater.from(getActivity())
                 .inflate(R.layout.dialog_date, null);

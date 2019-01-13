@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -35,6 +37,7 @@ import android.widget.ImageView;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ChoiceFormat;
 import java.text.DateFormat;
 import java.util.Date;
@@ -53,6 +56,7 @@ import static android.widget.CompoundButton.*;
 public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_PHOTO = "DialogPhoto";
 
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_CONTACT = 1;
@@ -73,7 +77,12 @@ public class CrimeFragment extends Fragment {
     @BindView(R.id.crime_camera)
     ImageButton mPhotoButton;
 
-
+    @OnClick(R.id.crime_photo)
+    public void photoZoomIn() {
+        FragmentManager manager = getFragmentManager();
+        PhotoZoomFragment dialog = PhotoZoomFragment.newInstance(mPhtoFile);
+        dialog.show(manager, DIALOG_PHOTO);
+    }
 
     @OnClick(R.id.crime_date)
     public void openDatePicker() {
@@ -180,6 +189,7 @@ public class CrimeFragment extends Fragment {
         });
 
         updatePhotoView();
+
 
         return  v;
     }
@@ -298,8 +308,21 @@ public class CrimeFragment extends Fragment {
         if(mPhtoFile == null || !mPhtoFile.exists()) {
             mPhotoView.setImageDrawable(null);
         }else{
+
+//            try {
+//
+//                //ExifInterface exif = new ExifInterface(mPhtoFile.getName());
+//                //int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+//
+//            } catch (IOException e){
+//
+//            }
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhtoFile.getPath(), getActivity());
-            mPhotoView.setImageBitmap(bitmap);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(270);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), matrix, true);
+            mPhotoView.setImageBitmap(rotatedBitmap);
         }
     }
 
